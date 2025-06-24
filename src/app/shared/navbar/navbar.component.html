@@ -1,25 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-success px-4 sticky-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">CorteArroz</a>
+      <a class="navbar-brand" [routerLink]="isLoggedIn ? '/dashboard' : '/'">CorteArroz</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
   
       <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav me-auto">
-  
+        <!-- Menús solo si está autenticado -->
+        <ul class="navbar-nav me-auto" *ngIf="isLoggedIn">
           <!-- Mantenimiento -->
-          @if (nombreUsuario) {
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
               Mantenimiento
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Máquinas</a></li>
-              <li><a class="dropdown-item" href="#">Repuestos</a></li>
-              <li><a class="dropdown-item" href="#">Proveedores</a></li>
+              <li><a class="dropdown-item" routerLink="/maquinas">Máquinas</a></li>
+              <li><a class="dropdown-item" routerLink="/repuestos">Repuestos</a></li>
+              <li><a class="dropdown-item" routerLink="/proveedores">Proveedores</a></li>
               <li><a class="dropdown-item" href="#">Mantenimientos</a></li>
             </ul>
           </li>
@@ -31,7 +30,7 @@
               Cortes
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Clientes</a></li>
+              <li><a class="dropdown-item" routerLink="/clientes">Clientes</a></li>
               <li><a class="dropdown-item" href="#">Temporadas</a></li>
               <li><a class="dropdown-item" href="#">Cortes</a></li>
               <li><a class="dropdown-item" href="#">Insumos</a></li>
@@ -55,22 +54,23 @@
           <li class="nav-item">
             <a class="nav-link text-white fw-semibold" href="#">Usuarios</a>
           </li>
-        }
         </ul>
       
-       <!-- Lado derecho -->
-       @if (nombreUsuario) {
-        <span class="navbar-text text-white me-3">
-          Bienvenido, {{ nombreUsuario }}
-        </span>
-        <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar sesión</button>
-      } @else {
-        <span class="navbar-text text-white me-3">
-          No has iniciado sesión
-        </span>
-      }
-      
-
+       <!-- Lado derecho - Condicional según autenticación -->
+       <div class="d-flex align-items-center">
+         <ng-container *ngIf="isLoggedIn; else notLoggedIn">
+           <span class="navbar-text text-white me-3">
+             Bienvenido, {{ nombreUsuario }}
+           </span>
+           <button class="btn btn-outline-light btn-sm" (click)="logout()">Cerrar sesión</button>
+         </ng-container>
+         
+         <ng-template #notLoggedIn>
+           <span class="navbar-text text-white">
+             Sistema de Gestión de Corte de Arroz
+           </span>
+         </ng-template>
+       </div>
       </div>
     </div>
   </nav>

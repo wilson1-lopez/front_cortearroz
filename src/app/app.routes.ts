@@ -7,36 +7,57 @@ import { ProveedoresComponent } from './paginas/proveedores/proveedores.componen
 import { RepuestosComponent } from './paginas/repuestos/repuestos.component';
 import { DetallemantenimientoComponent } from './paginas/detallemantenimiento/detallemantenimiento.component';
 import { ClientesComponent } from './paginas/clientes/clientes.component';
+import { authGuard } from './guards/auth.guard';
+import { loginGuard } from './guards/login.guard';
 
 export const routes: Routes = [
-{
+  {
     path: '',
     component: LoginComponent,
-},
-{
+    canActivate: [loginGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [loginGuard]
+  },
+  {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [authGuard]
   },
-  { path: 'maquinas', component: MaquinasComponent },
-
+  { 
+    path: 'maquinas', 
+    component: MaquinasComponent,
+    canActivate: [authGuard]
+  },
   {
-    path: 'mantenimientos/:id', component: MantenimientosComponent
+    path: 'mantenimientos/:id', 
+    component: MantenimientosComponent,
+    canActivate: [authGuard]
   },
-
   {
-    path: 'proveedores', component: ProveedoresComponent
+    path: 'proveedores', 
+    component: ProveedoresComponent,
+    canActivate: [authGuard]
   },
-
   {
-    path: 'repuestos', component: RepuestosComponent
+    path: 'repuestos', 
+    component: RepuestosComponent,
+    canActivate: [authGuard]
   },
-
   {
-    path: 'detallemantenimientos/:id', component: DetallemantenimientoComponent
+    path: 'detallemantenimientos/:id', 
+    component: DetallemantenimientoComponent,
+    canActivate: [authGuard]
   },
-
-   {
-    path: 'clientes', component: ClientesComponent
+  {
+    path: 'clientes', 
+    component: ClientesComponent,
+    canActivate: [authGuard]
   },
-
+  {
+    path: '**',
+    redirectTo: '/dashboard'
+  }
 ];

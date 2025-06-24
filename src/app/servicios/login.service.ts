@@ -34,7 +34,25 @@ export class LoginService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const decoded = jwtDecode<AuthTokenPayload>(token);
+      const currentTime = Date.now() / 1000;
+      
+      // Verificar si el token ha expirado
+      if (decoded.exp < currentTime) {
+        this.logout(); // Limpiar token expirado
+        return false;
+      }
+      
+      return true;
+    } catch (e) {
+      console.error('Token inválido', e);
+      this.logout(); // Limpiar token inválido
+      return false;
+    }
   }
 
   getToken(): string | null {

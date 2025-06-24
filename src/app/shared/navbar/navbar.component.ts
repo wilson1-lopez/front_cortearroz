@@ -1,38 +1,41 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../servicios/login.service';
 import { AuthTokenPayload } from '../../modelos/auth-token.model';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [CommonModule, RouterModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-AbrirMenu=false;
-mantenimientoOpen = false;
+  AbrirMenu = false;
+  mantenimientoOpen = false;
   
- constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
-abrirMenu(){
-  this.AbrirMenu = !this.AbrirMenu;
-}
-toggleMantenimiento() {
-  this.mantenimientoOpen = !this.mantenimientoOpen;
-  //this.cortesOpen = false; // Cierra el otro si está abierto
-}
- //nos traemos el nombre del usario desde el servicio de login
- public get nombreUsuario(): string | null {
-  const usuario: AuthTokenPayload | null = this.loginService.getUsuarioAutenticado();
-  return usuario ? usuario.nombre : null;
-}
+  abrirMenu() {
+    this.AbrirMenu = !this.AbrirMenu;
+  }
 
-logout() {
-  this.loginService.logout();
-  // redirecciona con router.navigate añ el login cuando se cierre sesion 
-  
-}
+  toggleMantenimiento() {
+    this.mantenimientoOpen = !this.mantenimientoOpen;
+  }
 
+  // Verificar si el usuario está autenticado
+  get isLoggedIn(): boolean {
+    return this.loginService.isLoggedIn();
+  }
 
+  // Obtener el nombre del usuario desde el servicio de login
+  get nombreUsuario(): string | null {
+    const usuario: AuthTokenPayload | null = this.loginService.getUsuarioAutenticado();
+    return usuario ? usuario.nombre : null;
+  }
+
+  logout() {
+    this.loginService.logout();
+  }
 }
