@@ -3,9 +3,9 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <form [formGroup]="clienteForm" (ngSubmit)="guardarCliente()">
-          <div class="modal-header">
-            <h5 class="modal-title">Nuevo Cliente</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="CerrarModalCliente"></button>
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">Agregar Nuevo Cliente</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar" id="CerrarModalCliente"></button>
           </div>
 
            <div class="modal-body">
@@ -79,14 +79,14 @@
           </div>
 
           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalCliente">Cancelar</button>
             <button 
               type="submit" 
-              class="btn btn-primary" 
+              class="btn btn-success" 
               [disabled]="guardando || clienteForm.invalid" 
               >
-              {{ guardando ? 'Guardando...' : 'Guardar Cliente' }}
+              <i class="bi bi-plus-circle me-2"></i>{{ guardando ? 'Guardando...' : 'Crear Cliente' }}
             </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalCliente">Cancelar</button>
           </div>
 
         </form>

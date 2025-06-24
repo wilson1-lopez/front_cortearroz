@@ -2,7 +2,7 @@
 <div id="modalEditar" class="modal fade" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"> <!-- Clase añadida para centrar el modal -->
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-warning text-dark">
           <h5 class="modal-title">Editar Máquina</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="btnCerrarModaleditar"></button>
         </div>
@@ -24,18 +24,15 @@
               </select>
             </div>
          
-        
-        <div class="modal-footer">
-
+          <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <button 
             type="submit" 
-            class="btn btn-primary" 
+            class="btn btn-warning text-dark" 
             [disabled]="guardando || maquinaForm.invalid" 
            >
-            {{ guardando ? 'Guardando...' : 'Guardar' }}
+            <i class="bi bi-pencil me-2"></i>{{ guardando ? 'Guardando...' : 'Actualizar Máquina' }}
           </button>
-
-         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
 
       </form>
