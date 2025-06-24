@@ -1,0 +1,35 @@
+<!-- Modal para agregar nuevo tipo de trabajador -->
+<div class="modal fade" id="modalNuevoTipoTrabajador" tabindex="-1" aria-labelledby="modalNuevoTipoTrabajadorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalNuevoTipoTrabajadorLabel">Agregar Nuevo Tipo de Trabajador</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearTipoTrabajador()" #tipoTrabajadorForm="ngForm">
+          <div class="mb-3">
+            <label for="nombre" class="form-label fw-bold">Nombre del Tipo de Trabajador *</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="nombre" 
+              name="nombre"
+              [(ngModel)]="nuevoTipoTrabajador.nombre"
+              required
+              maxlength="250"
+              placeholder="Ejemplo: Operador de Máquina"
+            >
+            <div class="form-text">Máximo 250 caracteres</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="crearTipoTrabajador()">
+          <i class="bi bi-plus-circle me-2"></i>Crear Tipo de Trabajador
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

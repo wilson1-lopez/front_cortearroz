@@ -1,0 +1,37 @@
+<!-- Modal para editar tipo de trabajador -->
+<div class="modal fade" id="modalEditarTipoTrabajador" tabindex="-1" aria-labelledby="modalEditarTipoTrabajadorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="modalEditarTipoTrabajadorLabel">Editar Tipo de Trabajador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        @if (tipoTrabajadorParaEditar) {
+          <form (ngSubmit)="editarTipoTrabajador()" #editarTipoTrabajadorForm="ngForm">
+            <div class="mb-3">
+              <label for="editarNombre" class="form-label fw-bold">Nombre del Tipo de Trabajador *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="editarNombre" 
+                name="editarNombre"
+                [(ngModel)]="tipoTrabajadorEditando.nombre"
+                required
+                maxlength="250"
+                placeholder="Ejemplo: Operador de Máquina"
+              >
+              <div class="form-text">Máximo 250 caracteres</div>
+            </div>
+          </form>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning text-dark" (click)="editarTipoTrabajador()">
+          <i class="bi bi-pencil me-2"></i>Actualizar Tipo de Trabajador
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
