@@ -1,0 +1,77 @@
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-md-start">Listado de Repuestos</h2>
+  
+    <!-- Buscador y botón (responsive) -->
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar repuesto...">
+      </div>
+      
+      <div class="d-flex justify-content-end justify-content-md-start">
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalAgregarRepuesto">
+          <i class="bi bi-plus-circle"></i> Nuevo Repuesto
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tabla responsive -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+          <!-- <th>Precio</th>-->
+            <th>Acciones</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+            @for(repuesto of repuestos; track repuesto.id){
+          <tr>
+            <td>{{ repuesto.nombre }}</td>
+            <td>{{repuesto.descripcion}}</td>
+            <!--<td>{{repuesto.proveedores[0].pivot.precio}}</td>-->
+           
+          
+            <td>
+              <div class="d-flex flex-wrap gap-1">
+                <button class="btn btn-sm btn-primary" title="Ver detalles">
+                  <i class="bi bi-eye"></i>
+                </button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarProveedor">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" title="Eliminar" (click)="eliminarRepuesto(repuesto.id)">
+                  
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Indicadores de carga y estado
+    <div class="text-center mt-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div> 
+  
+    <div class="alert alert-danger mt-3 d-none">
+      Error al cargar los proveedores.
+    </div>
+    <div class="alert alert-info mt-3 d-none">
+      Aún no tiene proveedores registrados.
+    </div>-->
+  
+    <!-- Modales  --> 
+    
+    <app-modalagregarrepuesto (repuestoCreado)="agegarRepuesto($event)"></app-modalagregarrepuesto>
+    <!--
+    <app-modaleditar></app-modaleditar>-->
+  </div>
+  

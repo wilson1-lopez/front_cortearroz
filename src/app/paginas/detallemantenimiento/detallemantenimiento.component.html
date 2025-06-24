@@ -1,0 +1,72 @@
+<div class="container mt-4">
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border" role="status"></div>
+  </div>
+  <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+  <div *ngIf="detalle">
+    <h2 class="mb-4 text-center">Detalle de Mantenimientos</h2>
+    <div class="mb-3">
+      <strong class="fs-3">Máquina:</strong> <span class="fs-3">{{ detalle.maquina_nombre }}</span> <span class="text-muted"></span>
+    </div>
+    <!-- Botón para agregar nuevo mantenimiento -->
+    <div class="mb-4 text-end">
+      <a
+        class="btn btn-success"
+        [routerLink]="['/mantenimientos', detalle.maquina_id]"
+      >
+        Agregar nuevo mantenimiento
+      </a>
+    </div>
+    <div *ngFor="let mant of detalle.mantenimientos" class="card mb-4 shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <strong>{{ mant.nombre }}</strong> - {{ mant.fecha | date:'yyyy-MM-dd' }}
+      </div>
+      <div class="card-body">
+        <p><strong>Descripción:</strong> {{ mant.descripcion }}</p>
+        <p><strong>Realizado por:</strong> {{ mant.realizado_por }}</p>
+        <div>
+          <strong>Acciones realizadas:</strong>
+          <ul class="mb-2">
+            <li *ngFor="let acc of mant.acciones">{{ acc.descripcion }}</li>
+          </ul>
+        </div>
+        <div>
+          <strong>Repuestos usados:</strong>
+          <div *ngIf="mant.repuestos && mant.repuestos.length > 0; else sinRepuestos">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm mt-2 align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Repuesto</th>
+                    <th>Cantidad</th>
+                    <th>Valor</th>
+                    <th>Forma de pago</th>
+                    <th>Proveedor</th>
+                   <!-- <th>Precio proveedor</th>-->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let rep of mant.repuestos">
+                    <td>{{ rep.repuesto.nombre }}</td>
+                    <td>{{ rep.cantidad }}</td>
+                    <td>{{ rep.valor }}</td>
+                    <td>{{ rep.forma_pago }}</td>
+                    <td>{{ rep.proveedor.nombre }}</td>
+                 <!-- <td>{{ rep.precio_proveedor }}</td>-->
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <ng-template #sinRepuestos>
+            <div class="text-muted">No se registraron repuestos.</div>
+          </ng-template>
+        </div>
+        <div>
+          <strong>Total repuestos:</strong>
+          <span>${{ mant.total_repuestos | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

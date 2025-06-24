@@ -1,0 +1,35 @@
+<div class="modal fade" id="modalEditarProveedor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="proveedorForm" (ngSubmit)="editarProveedor()">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Proveedor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="CerrarModalEditarProveedor"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label>Nombre</label>
+            <input type="text" class="form-control" formControlName="nombre" />
+          </div>
+          <div class="mb-3">
+            <label>Telefono</label>
+            <input type="text" class="form-control" formControlName="telefono"/>
+          </div>
+          <div class="mb-3">
+            <label>Direccion</label>
+            <input type="text" class="form-control" formControlName="direccion" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="guardando || proveedorForm.invalid">
+            {{ guardando ? 'Guardando...' : 'Guardar Cambios' }}
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalEditar">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

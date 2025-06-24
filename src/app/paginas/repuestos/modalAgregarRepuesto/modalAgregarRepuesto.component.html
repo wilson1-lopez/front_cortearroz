@@ -1,0 +1,40 @@
+<!-- Modal Agregar Repuesto -->
+<div class="modal fade" id="modalAgregarRepuesto" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form [formGroup]="repuestoForm" (ngSubmit)="guardarRepuesto()">
+          
+          <div class="modal-header">
+            <h5 class="modal-title">Agregar Repuesto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="CerrarModalRepuesto"></button>
+          </div>
+
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="nombre">Nombre del Repuesto</label>
+              <input type="text" id="nombre" class="form-control" formControlName="nombre" placeholder="Ingrese el nombre" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="descripcion">Descripción</label>
+              <textarea id="descripcion" class="form-control" formControlName="descripcion" placeholder="Ingrese la descripción"></textarea>
+            </div>
+          </div>
+
+        
+
+          <div class="modal-footer">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="guardando || repuestoForm.invalid"
+            >
+              {{ guardando ? 'Guardando...' : 'Guardar' }}
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalRepuesto">Cancelar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+</div>

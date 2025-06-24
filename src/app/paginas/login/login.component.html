@@ -1,0 +1,58 @@
+<div class="container d-flex justify-content-center align-items-center vh-100 bg-light">
+
+ 
+
+    <div class="card shadow p-4 dimension " >
+      <h3 class="text-center mb-4">Inicio de Sesión</h3>
+
+      @if (errorMessage) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = null" aria-label="Cerrar"></button>
+        </div>
+      }
+      <form [formGroup]="form" (ngSubmit)="login()">
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" id="email" class="form-control" formControlName="email" placeholder="ejemplo@correo.com" />
+          
+          @if (form.get('email')?.touched && form.get('email')?.invalid) {
+            <div class="text-danger small">
+              @if (form.get('email')?.errors?.['required']) {
+                <span>El correo es obligatorio.</span>
+              }
+              @if (form.get('email')?.errors?.['email']) {
+                <span>Formato inválido.</span>
+              }
+            </div>
+          }
+        </div>
+      
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input type="password" id="password" class="form-control" formControlName="password" placeholder="********" />
+      
+          @if (form.get('password')?.touched && form.get('password')?.invalid) {
+            <div class="text-danger small">
+              <span>La contraseña es obligatoria.</span>
+            </div>
+          }
+        </div>
+      
+        <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid || isLoading">
+          @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Iniciando...
+          } @else {
+            Ingresar
+          }
+        </button>
+      </form>
+      
+      
+      <div class="mt-3 text-center">
+        <small>¿No tienes cuenta? Contacta al administrador.</small>
+      </div>
+    </div>
+  </div>
+  

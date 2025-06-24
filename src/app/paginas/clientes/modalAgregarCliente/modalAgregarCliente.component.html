@@ -1,0 +1,96 @@
+<!-- Modal -->
+<div class="modal fade" id="modalNuevoCliente" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <form [formGroup]="clienteForm" (ngSubmit)="guardarCliente()">
+          <div class="modal-header">
+            <h5 class="modal-title">Nuevo Cliente</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="CerrarModalCliente"></button>
+          </div>
+
+           <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Nombre *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                formControlName="nombre"
+                [class.is-invalid]="clienteForm.get('nombre')?.invalid && clienteForm.get('nombre')?.touched"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage('nombre') }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Apellido *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                formControlName="apellido"
+                [class.is-invalid]="clienteForm.get('apellido')?.invalid && clienteForm.get('apellido')?.touched"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage('apellido') }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Teléfono *</label>
+              <input 
+                type="tel" 
+                class="form-control" 
+                formControlName="telefono"
+                placeholder="3001234567"
+                [class.is-invalid]="clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage('telefono') }}
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Cédula *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                formControlName="cedula"
+                placeholder="12345678"
+                [class.is-invalid]="clienteForm.get('cedula')?.invalid && clienteForm.get('cedula')?.touched"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage('cedula') }}
+              </div>
+            </div>
+               
+            <div class="mb-3">
+              <label class="form-label">Dirección *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                formControlName="direccion"
+                placeholder="Calle 123 #45-67"
+                [class.is-invalid]="clienteForm.get('direccion')?.invalid && clienteForm.get('direccion')?.touched"
+              />
+              <div class="invalid-feedback">
+                {{ getErrorMessage('direccion') }}
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="guardando || clienteForm.invalid" 
+              >
+              {{ guardando ? 'Guardando...' : 'Guardar Cliente' }}
+            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCerrarModalCliente">Cancelar</button>
+          </div>
+
+        </form>
+        
+      </div>
+    </div>
+  </div>

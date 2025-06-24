@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <h2 class="mb-4 text-center text-md-start">Listado de Máquinas</h2>
+
+  <!-- Buscador y botón (responsive) -->
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-md-6">
+      <input type="text" class="form-control" placeholder="Buscar máquina..."  [(ngModel)]="buscarTermino" (input)="actualizarBusqueda()">
+    </div>
+    
+    <div class="d-flex justify-content-end justify-content-md-start">
+      <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalNuevaMaquina">
+        <i class="bi bi-plus-circle"></i> Nueva Máquina
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla responsive -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+         
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (maquina of maquinas; track maquina.id) {
+          <tr>
+          <td>{{ maquina.nombre }}</td>
+          <td>{{ maquina.descripcion }}</td>
+          <td><span class="badge bg-success">{{ maquina.estado }}</span></td>
+          <td>
+
+            <div class="d-flex flex-wrap gap-1">
+              <button class="btn btn-sm btn-primary" (click)="verMantenimiento(maquina.id)" title="Ver reparación">
+                <i class="bi bi-tools"></i>
+              </button>
+              
+              
+              <button class="btn btn-warning" (click)="seleccionarMaquina(maquina)" data-bs-toggle="modal" data-bs-target="#modalEditar">
+                <i class="bi bi-pencil"></i>
+              </button>
+
+              <button class="btn btn-sm btn-danger" title="Eliminar" ngClass="eliminarMaquina" (click)="eliminarMaquina(maquina.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+
+            </div>
+          </td>
+        
+        </tr>
+      }
+      </tbody>
+    </table>
+    @if (cargando) {
+      <div class="text-center mt-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    } @else {
+      @if (errorAlCargar) {
+        <div class="alert alert-danger mt-3">
+          Error al cargar las máquinas.
+        </div>
+      } @else if (maquinas.length === 0) {
+        <div class="alert alert-info mt-3">
+          Aún no tiene máquinas registradas.
+        </div>
+      }
+    }
+    
+  </div>
+
+ <!-- Componente del modal -->
+ <app-modalagregarmaquina (maquinaCreada)="agregarMaquina($event)"></app-modalagregarmaquina>
+  
+ <app-modaleditarmaquina
+ #modalEditar
+ [maquina]="maquinaSeleccionada"
+ (maquinaEditada)="actualizarLista()">
+</app-modaleditarmaquina>

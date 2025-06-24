@@ -1,0 +1,97 @@
+<div class="container mt-4 mb-5">
+  <h2 class="mb-4 text-center">Registrar Mantenimiento</h2>
+
+  <form [formGroup]="formularioMantenimiento" (ngSubmit)="registrarMantenimiento()">
+    <!-- Fecha -->
+    <div class="mb-3">
+      <label class="form-label">Fecha</label>
+      <input type="date" class="form-control" formControlName="fecha">
+    </div>
+
+    <!-- Nombre -->
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control" placeholder="Ejemplo: Mantenimiento Preventivo" formControlName="nombre">
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-control" rows="3" placeholder="Detalles del mantenimiento" formControlName="descripcion"></textarea>
+    </div>
+
+    <!-- Realizado por -->
+    <div class="mb-3">
+      <label class="form-label">Realizado por</label>
+      <input type="text" class="form-control" placeholder="Nombre del técnico" formControlName="realizado_por">
+    </div>
+
+    <!-- Selección de repuestos -->
+    <div class="mb-3">
+      <label class="form-label">Repuestos necesarios</label>
+      <div formArrayName="repuestos">
+        <div *ngFor="let repForm of repuestos.controls; let i = index" [formGroupName]="i" class="border rounded p-2 mb-2">
+          <div class="row g-2">
+            <div class="col-md-3">
+              <select class="form-select" formControlName="repuesto_id" (change)="onRepuestoChange(i)">
+                <option value="">Seleccione un repuesto</option>
+                <option *ngFor="let rep of repuestosCatalogo" [value]="rep.id">
+                  {{ rep.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select class="form-select" formControlName="proveedor_id" (change)="onProveedorChange(i)">
+                <option value="">Seleccione un proveedor</option>
+                <option *ngFor="let prov of proveedoresCatalogo" [value]="prov.id">
+                  {{ prov.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <input type="number" class="form-control" placeholder="Cantidad" formControlName="cantidad" min="1" title="Cantidad">
+            </div>
+            <div class="col-md-2">
+              <input type="number" class="form-control" placeholder="Precio proveedor" formControlName="precio_proveedor" title="Precio proveedor">
+            </div>
+            <div class="col-md-2">
+              <select class="form-select" formControlName="forma_pago" title="Forma de pago">
+                <option value="">Forma de pago</option>
+                <option value="efectivo">Efectivo</option>
+                <option value="transferencia">Transferencia</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+            <div class="col-md-1">
+              <button type="button" class="btn btn-danger btn-sm" (click)="eliminarRepuesto(i)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-primary mt-2" (click)="agregarRepuesto()">+ Agregar repuesto</button>
+    </div>
+
+    <!-- Lista de acciones de mantenimiento -->
+    <div class="mb-3">
+      <label class="form-label">Acciones de mantenimiento</label>
+      <div formArrayName="acciones">
+        <div *ngFor="let accionForm of acciones.controls; let j = index" [formGroupName]="j" class="d-flex mb-2 align-items-center">
+          <input type="text" class="form-control me-2" placeholder="Ejemplo: Cambio de aceite" formControlName="descripcion">
+          <button type="button" class="btn btn-danger btn-sm" (click)="eliminarAccion(j)">Eliminar</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline-secondary mt-2" (click)="agregarAccion()">+ Agregar acción</button>
+    </div>
+
+    <!-- Total del mantenimiento -->
+    <div class="mb-3 text-end">
+      <strong>Total del mantenimiento: </strong>
+      <span class="fs-5">${{ totalMantenimiento | number:'1.2-2' }}</span>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100" [disabled]="formularioMantenimiento.invalid || enviando">
+      {{ enviando ? 'Registrando...' : 'Registrar Mantenimiento' }}
+    </button>
+  </form>
+</div>

@@ -1,0 +1,64 @@
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-md-start">Listado de Proveedores</h2>
+  
+    <!-- Buscador y botón (responsive) -->
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <input type="text" class="form-control" placeholder="Buscar proveedor...">
+      </div>
+      <div class="d-flex justify-content-end justify-content-md-start">
+        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalNuevoProveedor">
+          <i class="bi bi-plus-circle"></i> Nuevo Proveedor 
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tabla responsive -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for(proveedores of proveedor; track proveedores.id){
+            <tr>
+              <td>{{ proveedores.nombre }}</td>
+              <td>{{ proveedores.telefono }}</td>
+              <td>{{ proveedores.email }}</td>
+              <td>{{ proveedores.direccion }}</td>
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  <button class="btn btn-sm btn-primary" title="Ver detalles">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button 
+                    class="btn btn-warning" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#modalEditarProveedor"
+                    (click)="abrirModalEditar(proveedores)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" title="Eliminar" (click)="eliminarProveedor(proveedores.id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Modales -->  
+    <app-modalagregarproveedor (proveedorCreado)="agegarProveedor($event)"></app-modalagregarproveedor>
+    <app-modal-editar-proveedor 
+      [proveedor]="proveedorSeleccionado!" 
+      (proveedorEditado)="actualizarLista()">
+    </app-modal-editar-proveedor>
+</div>
