@@ -2,10 +2,12 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CortesService } from '../../../servicios/cortes.service';
+import { TiposTrabajadoresService } from '../../../servicios/tipos-trabajadores.service';
 import { Corte, CorteFormData } from '../../../modelos/corte.model';
 import { Cliente } from '../../../modelos/cliente.model';
 import { Maquina } from '../../../modelos/maquina.model';
 import { Trabajador } from '../../../modelos/trabajador.model';
+import { TipoTrabajador } from '../../../modelos/tipo-trabajador.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,10 +26,12 @@ export class ModalAgregarCorteComponent implements OnInit {
 
   corteForm: FormGroup;
   guardando: boolean = false;
+  tiposTrabajadores: TipoTrabajador[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private cortesService: CortesService
+    private cortesService: CortesService,
+    private tiposTrabajadoresService: TiposTrabajadoresService
   ) {
     this.corteForm = this.fb.group({
       fecha_inicio: ['', [Validators.required]],
@@ -47,6 +51,21 @@ export class ModalAgregarCorteComponent implements OnInit {
     if (fechaInicioControl) {
       fechaInicioControl.patchValue(hoy);
     }
+
+    // Cargar tipos de trabajadores
+    this.cargarTiposTrabajadores();
+  }
+
+  private cargarTiposTrabajadores(): void {
+    this.tiposTrabajadoresService.obtenerTiposTrabajadores().subscribe({
+      next: (tipos) => {
+        this.tiposTrabajadores = tipos;
+        console.log('Tipos de trabajadores cargados:', tipos);
+      },
+      error: (error) => {
+        console.error('Error al cargar tipos de trabajadores:', error);
+      }
+    });
   }
 
   get maquinasArray(): FormArray {
@@ -71,6 +90,7 @@ export class ModalAgregarCorteComponent implements OnInit {
 
   agregarTrabajador(): void {
     const trabajadorGroup = this.fb.group({
+      tipo_id: ['', [Validators.required]],
       trabajador_id: ['', [Validators.required]],
       precio_acordado: ['', [Validators.required, Validators.min(0)]]
     });
@@ -79,6 +99,30 @@ export class ModalAgregarCorteComponent implements OnInit {
 
   removerTrabajador(index: number): void {
     this.trabajadoresArray.removeAt(index);
+  }
+
+  onTipoTrabajadorChange(index: number, event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    const tipoId = select.value;
+    const trabajadorGroup = this.trabajadoresArray.at(index);
+    if (trabajadorGroup) {
+      // Limpiar selección de trabajador cuando cambia el tipo
+      trabajadorGroup.get('trabajador_id')?.setValue('');
+      console.log(`Tipo cambiado en index ${index} a tipo_id: ${tipoId}`);
+      console.log('Trabajadores filtrados:', this.getTrabajadoresPorTipo(tipoId));
+    }
+  }
+
+  getTrabajadoresPorTipo(tipoId: string | null): Trabajador[] {
+    if (!tipoId || tipoId === '') {
+      return [];
+    }
+    const tipoIdNumber = parseInt(tipoId);
+    const trabajadoresFiltrados = this.trabajadores.filter(trabajador => 
+      trabajador.tipo_id === tipoIdNumber
+    );
+    console.log(`Filtrando trabajadores para tipo_id ${tipoIdNumber}:`, trabajadoresFiltrados);
+    return trabajadoresFiltrados;
   }
 
   onMaquinaChange(maquinaId: number, event: any): void {
@@ -167,7 +211,7 @@ export class ModalAgregarCorteComponent implements OnInit {
 
     // Validar arrays anidados
     this.trabajadoresArray.controls.forEach(control => {
-      Object.keys(control.value).forEach(key => {
+      Object.keys((control as FormGroup).controls).forEach(key => {
         const nestedControl = control.get(key);
         if (nestedControl && nestedControl.invalid) {
           nestedControl.markAsTouched();

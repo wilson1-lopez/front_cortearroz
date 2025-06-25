@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, CurrencyPipe } from '@angular/common';
 import { TemporadasService } from '../../servicios/temporadas.service';
@@ -26,6 +26,8 @@ import Swal from 'sweetalert2';
   styleUrl: './detalles-temporada.component.css'
 })
 export class DetallesTemporadaComponent implements OnInit {
+  @ViewChild(ModalEditarCorteComponent) modalEditarCorte!: ModalEditarCorteComponent;
+  
   temporada: Temporada | null = null;
   cortes: Corte[] = [];
   clientes: Cliente[] = [];
@@ -172,12 +174,22 @@ export class DetallesTemporadaComponent implements OnInit {
   }
 
   abrirModalEditarCorte(corte: Corte): void {
+    console.log('Abriendo modal de editar con corte:', corte);
     this.corteSeleccionado = corte;
-    const modalElement = document.getElementById('modalEditarCorte');
-    if (modalElement) {
-      const modal = new (window as any).bootstrap.Modal(modalElement);
-      modal.show();
-    }
+    
+    // Dar tiempo para que Angular actualice el input binding
+    setTimeout(() => {
+      // Inicializar el modal con los datos actuales
+      if (this.modalEditarCorte) {
+        this.modalEditarCorte.inicializarModal();
+      }
+      
+      const modalElement = document.getElementById('modalEditarCorte');
+      if (modalElement) {
+        const modal = new (window as any).bootstrap.Modal(modalElement);
+        modal.show();
+      }
+    }, 100);
   }
 
   onCorteCreado(corte: Corte): void {
@@ -190,6 +202,11 @@ export class DetallesTemporadaComponent implements OnInit {
     if (index !== -1) {
       this.cortes[index] = corteActualizado;
       this.calcularEstadisticasCortes();
+      
+      // También actualizar el corteSeleccionado si es el mismo que se actualizó
+      if (this.corteSeleccionado && this.corteSeleccionado.id === corteActualizado.id) {
+        this.corteSeleccionado = corteActualizado;
+      }
     }
   }
 

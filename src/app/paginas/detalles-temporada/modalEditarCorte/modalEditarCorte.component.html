@@ -151,19 +151,39 @@
                 <div [formGroupName]="i" class="card mb-3">
                   <div class="card-body">
                     <div class="row g-3">
-                      <div class="col-md-6">
+                      <div class="col-md-4">
+                        <label class="form-label">Tipo de Trabajador <span class="text-danger">*</span></label>
+                        <select 
+                          class="form-select"
+                          formControlName="tipo_id"
+                          (change)="onTipoTrabajadorChange(i, $event)"
+                          [class.is-invalid]="trabajadorControl.get('tipo_id')?.invalid && trabajadorControl.get('tipo_id')?.touched">
+                          <option value="">Seleccionar tipo...</option>
+                          @for (tipo of tiposTrabajadores; track trackByTipoId($index, tipo)) {
+                            <option [value]="tipo.id">{{ tipo.nombre }}</option>
+                          }
+                        </select>
+                        <div class="form-text">Valor actual: {{ trabajadorControl.get('tipo_id')?.value }}</div>
+                      </div>
+                      <div class="col-md-4">
                         <label class="form-label">Trabajador <span class="text-danger">*</span></label>
                         <select 
                           class="form-select"
                           formControlName="trabajador_id"
+                          [disabled]="!trabajadorControl.get('tipo_id')?.value"
                           [class.is-invalid]="trabajadorControl.get('trabajador_id')?.invalid && trabajadorControl.get('trabajador_id')?.touched">
                           <option value="">Seleccionar trabajador...</option>
-                          @for (trabajador of trabajadores; track trabajador.id) {
+                          @for (trabajador of getTrabajadoresPorTipo(trabajadorControl.get('tipo_id')?.value); track trackByTrabajadorId($index, trabajador)) {
                             <option [value]="trabajador.id">{{ trabajador.nombre }} {{ trabajador.apellido }}</option>
                           }
                         </select>
+                        @if (!trabajadorControl.get('tipo_id')?.value) {
+                          <div class="form-text text-muted">Primero selecciona un tipo de trabajador</div>
+                        } @else {
+                          <div class="form-text">Trabajadores disponibles: {{ getTrabajadoresPorTipo(trabajadorControl.get('tipo_id')?.value).length }}</div>
+                        }
                       </div>
-                      <div class="col-md-5">
+                      <div class="col-md-3">
                         <label class="form-label">Precio Acordado <span class="text-danger">*</span></label>
                         <div class="input-group">
                           <span class="input-group-text">$</span>
