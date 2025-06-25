@@ -1,0 +1,90 @@
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-md-start">Listado de Trabajadores</h2>
+  
+    <!-- Buscador y botón (responsive) -->
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar trabajador..."
+            [(ngModel)]="terminoBusqueda"
+            (keyup.enter)="buscarTrabajadores()"
+          >
+          <button class="btn btn-outline-secondary" type="button" (click)="buscarTrabajadores()">
+            <i class="bi bi-search"></i>
+          </button>
+          @if (terminoBusqueda) {
+            <button class="btn btn-outline-danger" type="button" (click)="limpiarBusqueda()">
+              <i class="bi bi-x"></i>
+            </button>
+          }
+        </div>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-end justify-content-md-start">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevoTrabajador">
+          <i class="bi bi-plus-circle me-2"></i>Nuevo Trabajador
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tabla responsive -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre Completo</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            <th>Tipo</th>
+            <th>Fecha de Creación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (trabajadores.length === 0) {
+            <tr>
+              <td colspan="8" class="text-center text-muted">No hay trabajadores registrados</td>
+            </tr>
+          }
+          @for(trabajador of trabajadores; track trabajador.id){
+            <tr>
+              <td>{{ trabajador.id }}</td>
+              <td>{{ trabajador.nombre }} {{ trabajador.apellido }}</td>
+              <td>{{ trabajador.cedula || 'No especificada' }}</td>
+              <td>{{ trabajador.telefono || 'No especificado' }}</td>
+              <td>{{ trabajador.direccion || 'No especificada' }}</td>
+              <td>
+                <span class="badge bg-primary">
+                  {{ trabajador.tipo?.nombre || 'No asignado' }}
+                </span>
+              </td>
+              <td>{{ trabajador.created_at | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  <button class="btn btn-sm btn-warning" title="Editar" (click)="editarTrabajador(trabajador)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" title="Eliminar" (click)="eliminarTrabajador(trabajador.id!)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Modal para agregar trabajador -->
+  <app-modalAgregarTrabajador (trabajadorCreado)="agregarTrabajador($event)"></app-modalAgregarTrabajador>
+  
+  <!-- Modal para editar trabajador -->
+  <app-modalEditarTrabajador 
+    [trabajadorParaEditar]="trabajadorSeleccionado" 
+    (trabajadorEditado)="onTrabajadorEditado($event)">
+  </app-modalEditarTrabajador>

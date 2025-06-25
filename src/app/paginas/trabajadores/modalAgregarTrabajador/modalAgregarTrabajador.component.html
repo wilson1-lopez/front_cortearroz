@@ -1,0 +1,127 @@
+<!-- Modal para agregar nuevo trabajador -->
+<div class="modal fade" id="modalNuevoTrabajador" tabindex="-1" aria-labelledby="modalNuevoTrabajadorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalNuevoTrabajadorLabel">Agregar Nuevo Trabajador</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearTrabajador()" #trabajadorForm="ngForm">
+          <div class="row">
+            <!-- Nombre -->
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label fw-bold">Nombre *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombre" 
+                name="nombre"
+                [(ngModel)]="nuevoTrabajador.nombre"
+                required
+                maxlength="250"
+                placeholder="Ingrese el nombre"
+              >
+            </div>
+
+            <!-- Apellido -->
+            <div class="col-md-6 mb-3">
+              <label for="apellido" class="form-label fw-bold">Apellido *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="apellido" 
+                name="apellido"
+                [(ngModel)]="nuevoTrabajador.apellido"
+                required
+                maxlength="250"
+                placeholder="Ingrese el apellido"
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Cédula -->
+            <div class="col-md-6 mb-3">
+              <label for="cedula" class="form-label fw-bold">Cédula</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="cedula" 
+                name="cedula"
+                [(ngModel)]="nuevoTrabajador.cedula"
+                maxlength="250"
+                placeholder="Ingrese la cédula"
+              >
+              <div class="form-text">Opcional</div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="col-md-6 mb-3">
+              <label for="telefono" class="form-label fw-bold">Teléfono</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="telefono" 
+                name="telefono"
+                [(ngModel)]="nuevoTrabajador.telefono"
+                maxlength="250"
+                placeholder="Ingrese el teléfono"
+              >
+              <div class="form-text">Opcional</div>
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="mb-3">
+            <label for="direccion" class="form-label fw-bold">Dirección</label>
+            <textarea 
+              class="form-control" 
+              id="direccion" 
+              name="direccion"
+              [(ngModel)]="nuevoTrabajador.direccion"
+              maxlength="250"
+              rows="2"
+              placeholder="Ingrese la dirección"
+            ></textarea>
+            <div class="form-text">Opcional - Máximo 250 caracteres</div>
+          </div>
+
+          <div class="row">
+            <!-- Tipo de Trabajador -->
+            <div class="col-md-6 mb-3">
+              <label for="tipo_id" class="form-label fw-bold">Tipo de Trabajador *</label>
+              <select 
+                class="form-select" 
+                id="tipo_id" 
+                name="tipo_id"
+                [(ngModel)]="nuevoTrabajador.tipo_id"
+                required
+              >
+                <option value="0">Seleccione un tipo</option>
+                @for (tipo of tiposTrabajadores; track tipo.id) {
+                  <option [value]="tipo.id">{{ tipo.nombre }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Nota:</strong> El trabajador será asociado automáticamente con tu usuario.
+          </div>
+
+          <div class="text-muted">
+            <small>Los campos marcados con (*) son obligatorios</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="crearTrabajador()">
+          <i class="bi bi-plus-circle me-2"></i>Crear Trabajador
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

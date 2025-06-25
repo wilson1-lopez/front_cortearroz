@@ -8,6 +8,7 @@ import { RepuestosComponent } from './paginas/repuestos/repuestos.component';
 import { DetallemantenimientoComponent } from './paginas/detallemantenimiento/detallemantenimiento.component';
 import { ClientesComponent } from './paginas/clientes/clientes.component';
 import { TiposTrabajadoresComponent } from './paginas/tipos-trabajadores/tipos-trabajadores.component';
+import { TrabajadoresComponent } from './paginas/trabajadores/trabajadores.component';
 import { authGuard } from './guards/auth.guard';
 import { loginGuard } from './guards/login.guard';
 
@@ -60,6 +61,11 @@ export const routes: Routes = [
   {
     path: 'tipos-trabajadores', 
     component: TiposTrabajadoresComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'trabajadores', 
+    component: TrabajadoresComponent,
     canActivate: [authGuard]
   },
   {

@@ -1,0 +1,127 @@
+<!-- Modal para editar trabajador -->
+<div class="modal fade" id="modalEditarTrabajador" tabindex="-1" aria-labelledby="modalEditarTrabajadorLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="modalEditarTrabajadorLabel">Editar Trabajador</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="editarTrabajador()" #trabajadorForm="ngForm">
+          <div class="row">
+            <!-- Nombre -->
+            <div class="col-md-6 mb-3">
+              <label for="nombreEdit" class="form-label fw-bold">Nombre *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombreEdit" 
+                name="nombre"
+                [(ngModel)]="trabajadorEditando.nombre"
+                required
+                maxlength="250"
+                placeholder="Ingrese el nombre"
+              >
+            </div>
+
+            <!-- Apellido -->
+            <div class="col-md-6 mb-3">
+              <label for="apellidoEdit" class="form-label fw-bold">Apellido *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="apellidoEdit" 
+                name="apellido"
+                [(ngModel)]="trabajadorEditando.apellido"
+                required
+                maxlength="250"
+                placeholder="Ingrese el apellido"
+              >
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Cédula -->
+            <div class="col-md-6 mb-3">
+              <label for="cedulaEdit" class="form-label fw-bold">Cédula</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="cedulaEdit" 
+                name="cedula"
+                [(ngModel)]="trabajadorEditando.cedula"
+                maxlength="250"
+                placeholder="Ingrese la cédula"
+              >
+              <div class="form-text">Opcional</div>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="col-md-6 mb-3">
+              <label for="telefonoEdit" class="form-label fw-bold">Teléfono</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="telefonoEdit" 
+                name="telefono"
+                [(ngModel)]="trabajadorEditando.telefono"
+                maxlength="250"
+                placeholder="Ingrese el teléfono"
+              >
+              <div class="form-text">Opcional</div>
+            </div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="mb-3">
+            <label for="direccionEdit" class="form-label fw-bold">Dirección</label>
+            <textarea 
+              class="form-control" 
+              id="direccionEdit" 
+              name="direccion"
+              [(ngModel)]="trabajadorEditando.direccion"
+              maxlength="250"
+              rows="2"
+              placeholder="Ingrese la dirección"
+            ></textarea>
+            <div class="form-text">Opcional - Máximo 250 caracteres</div>
+          </div>
+
+          <div class="row">
+            <!-- Tipo de Trabajador -->
+            <div class="col-md-6 mb-3">
+              <label for="tipo_idEdit" class="form-label fw-bold">Tipo de Trabajador *</label>
+              <select 
+                class="form-select" 
+                id="tipo_idEdit" 
+                name="tipo_id"
+                [(ngModel)]="trabajadorEditando.tipo_id"
+                required
+              >
+                <option value="0">Seleccione un tipo</option>
+                @for (tipo of tiposTrabajadores; track tipo.id) {
+                  <option [value]="tipo.id">{{ tipo.nombre }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Nota:</strong> El usuario asignado se mantiene automáticamente.
+          </div>
+
+          <div class="text-muted">
+            <small>Los campos marcados con (*) son obligatorios</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning" (click)="editarTrabajador()">
+          <i class="bi bi-pencil me-2"></i>Actualizar Trabajador
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

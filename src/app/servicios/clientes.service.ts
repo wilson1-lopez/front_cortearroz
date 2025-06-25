@@ -18,7 +18,7 @@ export class ClientesService {
   }
 
   obtenerClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${this.apiUrl}/clientes`, {
+    return this.http.get<Cliente[]>(`${this.apiUrl}/clientesusuario`, {
       headers: this.getAuthHeaders()
     });
   }
