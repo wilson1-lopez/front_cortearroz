@@ -1,0 +1,218 @@
+<!-- Modal Agregar Corte -->
+<div class="modal fade" id="modalNuevoCorte" tabindex="-1" aria-labelledby="modalNuevoCorteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalNuevoCorteLabel">
+          <i class="bi bi-plus-circle me-2"></i>Nuevo Corte
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <form [formGroup]="corteForm" (ngSubmit)="guardarCorte()">
+        <div class="modal-body">
+          <!-- Información básica -->
+          <div class="row g-3">
+            <!-- Cliente -->
+            <div class="col-md-6">
+              <label for="cliente_id" class="form-label">Cliente <span class="text-danger">*</span></label>
+              <select 
+                class="form-select"
+                id="cliente_id"
+                formControlName="cliente_id"
+                [class.is-invalid]="corteForm.get('cliente_id')?.invalid && corteForm.get('cliente_id')?.touched">
+                <option value="">Seleccionar cliente...</option>
+                @for (cliente of clientes; track cliente.id) {
+                  <option [value]="cliente.id">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                }
+              </select>
+              @if (corteForm.get('cliente_id')?.invalid && corteForm.get('cliente_id')?.touched) {
+                <div class="invalid-feedback">
+                  {{ getErrorMessage('cliente_id') }}
+                </div>
+              }
+            </div>
+
+            <!-- Valor por bulto -->
+            <div class="col-md-6">
+              <label for="valor_bulto" class="form-label">Valor por Bulto <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input 
+                  type="number"
+                  class="form-control"
+                  id="valor_bulto"
+                  formControlName="valor_bulto"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                  [class.is-invalid]="corteForm.get('valor_bulto')?.invalid && corteForm.get('valor_bulto')?.touched">
+              </div>
+              @if (corteForm.get('valor_bulto')?.invalid && corteForm.get('valor_bulto')?.touched) {
+                <div class="invalid-feedback">
+                  {{ getErrorMessage('valor_bulto') }}
+                </div>
+              }
+            </div>
+
+            <!-- Fecha de inicio -->
+            <div class="col-md-6">
+              <label for="fecha_inicio" class="form-label">Fecha de Inicio <span class="text-danger">*</span></label>
+              <input 
+                type="date"
+                class="form-control"
+                id="fecha_inicio"
+                formControlName="fecha_inicio"
+                [class.is-invalid]="corteForm.get('fecha_inicio')?.invalid && corteForm.get('fecha_inicio')?.touched">
+              @if (corteForm.get('fecha_inicio')?.invalid && corteForm.get('fecha_inicio')?.touched) {
+                <div class="invalid-feedback">
+                  {{ getErrorMessage('fecha_inicio') }}
+                </div>
+              }
+            </div>
+
+            <!-- Fecha de fin -->
+            <div class="col-md-6">
+              <label for="fecha_fin" class="form-label">Fecha de Fin <span class="text-muted">(Opcional)</span></label>
+              <input 
+                type="date"
+                class="form-control"
+                id="fecha_fin"
+                formControlName="fecha_fin">
+              <div class="form-text">Dejar vacío para corte sin fecha límite</div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="col-12">
+              <label for="descripcion" class="form-label">Descripción <span class="text-muted">(Opcional)</span></label>
+              <textarea 
+                class="form-control"
+                id="descripcion"
+                formControlName="descripcion"
+                rows="3"
+                placeholder="Descripción del corte..."
+                maxlength="250"
+                [class.is-invalid]="corteForm.get('descripcion')?.invalid && corteForm.get('descripcion')?.touched"></textarea>
+              <div class="form-text">Máximo 250 caracteres</div>
+              @if (corteForm.get('descripcion')?.invalid && corteForm.get('descripcion')?.touched) {
+                <div class="invalid-feedback">
+                  {{ getErrorMessage('descripcion') }}
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Máquinas -->
+          <div class="mt-4">
+            <h6 class="border-bottom pb-2">
+              <i class="bi bi-gear me-2"></i>Máquinas Asignadas <span class="text-muted">(Opcional)</span>
+            </h6>
+            @if (maquinas.length > 0) {
+              <div class="row">
+                @for (maquina of maquinas; track maquina.id) {
+                  <div class="col-md-6 mb-2">
+                    <div class="form-check">
+                      <input 
+                        class="form-check-input"
+                        type="checkbox"
+                        [id]="'maquina_' + maquina.id"
+                        [checked]="isMaquinaSeleccionada(maquina.id)"
+                        (change)="onMaquinaChange(maquina.id, $event)">
+                      <label class="form-check-label" [for]="'maquina_' + maquina.id">
+                        <strong>{{ maquina.nombre }}</strong>
+                        @if (maquina.descripcion) {
+                          <br><small class="text-muted">{{ maquina.descripcion }}</small>
+                        }
+                      </label>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>No hay máquinas disponibles
+              </div>
+            }
+          </div>
+
+          <!-- Trabajadores -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+              <h6 class="mb-0">
+                <i class="bi bi-people me-2"></i>Trabajadores Asignados <span class="text-muted">(Opcional)</span>
+              </h6>
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="agregarTrabajador()">
+                <i class="bi bi-plus me-1"></i>Agregar
+              </button>
+            </div>
+            
+            <div formArrayName="trabajadores">
+              @for (trabajadorControl of trabajadoresArray.controls; track $index; let i = $index) {
+                <div [formGroupName]="i" class="card mb-3">
+                  <div class="card-body">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label class="form-label">Trabajador <span class="text-danger">*</span></label>
+                        <select 
+                          class="form-select"
+                          formControlName="trabajador_id"
+                          [class.is-invalid]="trabajadorControl.get('trabajador_id')?.invalid && trabajadorControl.get('trabajador_id')?.touched">
+                          <option value="">Seleccionar trabajador...</option>
+                          @for (trabajador of trabajadores; track trabajador.id) {
+                            <option [value]="trabajador.id">{{ trabajador.nombre }} {{ trabajador.apellido }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="col-md-5">
+                        <label class="form-label">Precio Acordado <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                          <span class="input-group-text">$</span>
+                          <input 
+                            type="number"
+                            class="form-control"
+                            formControlName="precio_acordado"
+                            placeholder="0.00"
+                            min="0"
+                            step="0.01"
+                            [class.is-invalid]="trabajadorControl.get('precio_acordado')?.invalid && trabajadorControl.get('precio_acordado')?.touched">
+                        </div>
+                      </div>
+                      <div class="col-md-1 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-danger" (click)="removerTrabajador(i)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+            
+            @if (trabajadoresArray.length === 0) {
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>No hay trabajadores asignados. Haz clic en "Agregar" para asignar trabajadores.
+              </div>
+            }
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-lg me-1"></i>Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="guardando || corteForm.invalid">
+            @if (guardando) {
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Guardando...
+            } @else {
+              <i class="bi bi-check-lg me-1"></i>Crear Corte
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Maquina } from '../modelos/maquina.model';
 import { LoginService } from './login.service';
 
@@ -14,9 +15,11 @@ export class MaquinasService {
 
   obtenerMaquinas(): Observable<Maquina[]> {
     const token = localStorage.getItem('token');
-    return this.http.get<Maquina[]>(`${this.apiUrl}/maquinasusuario`, {
+    return this.http.get<any>(`${this.apiUrl}/maquinasusuario`, {
       headers: { Authorization: `Bearer ${token}` }
-    });
+    }).pipe(
+      map(response => response.data || response)
+    );
   }
   private getAuthHeaders() {
     const token = localStorage.getItem('token');

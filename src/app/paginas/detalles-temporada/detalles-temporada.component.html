@@ -189,6 +189,141 @@
         </div>
       </div>
     </div>
+
+    <!-- Sección de Cortes -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-scissors me-2"></i>Cortes de la Temporada
+            </h5>
+            <button class="btn btn-light btn-sm" (click)="abrirModalAgregarCorte()">
+              <i class="bi bi-plus-circle me-1"></i>Nuevo Corte
+            </button>
+          </div>
+          
+          <!-- Estadísticas de Cortes -->
+          @if (estadisticasCortes) {
+            <div class="card-body border-bottom">
+              <div class="row text-center">
+                <div class="col-md-3">
+                  <div class="p-3">
+                    <i class="bi bi-collection display-6 text-primary"></i>
+                    <h4 class="mt-2 mb-1">{{ estadisticasCortes.total }}</h4>
+                    <small class="text-muted">Total Cortes</small>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="p-3">
+                    <i class="bi bi-play-circle display-6 text-warning"></i>
+                    <h4 class="mt-2 mb-1">{{ estadisticasCortes.activos }}</h4>
+                    <small class="text-muted">En Proceso</small>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="p-3">
+                    <i class="bi bi-check-circle display-6 text-success"></i>
+                    <h4 class="mt-2 mb-1">{{ estadisticasCortes.completados }}</h4>
+                    <small class="text-muted">Completados</small>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="p-3">
+                    <i class="bi bi-currency-dollar display-6 text-info"></i>
+                    <h4 class="mt-2 mb-1">{{ estadisticasCortes.valorTotal | currency:'COP':'symbol':'1.0-0' }}</h4>
+                    <small class="text-muted">Valor Total</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Lista de Cortes -->
+          <div class="card-body">
+            @if (cargandoCortes) {
+              <div class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Cargando cortes...</span>
+                </div>
+                <p class="mt-2 text-muted">Cargando cortes...</p>
+              </div>
+            } @else if (cortes.length === 0) {
+              <div class="text-center py-5">
+                <i class="bi bi-scissors display-1 text-muted"></i>
+                <h4 class="mt-3 text-muted">No hay cortes registrados</h4>
+                <p class="text-muted">Esta temporada aún no tiene cortes asociados.</p>
+                <button class="btn btn-primary" (click)="abrirModalAgregarCorte()">
+                  <i class="bi bi-plus-circle me-1"></i>Crear Primer Corte
+                </button>
+              </div>
+            } @else {
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Estado</th>
+                      <th>Cliente</th>
+                      <th>Fecha Inicio</th>
+                      <th>Fecha Fin</th>
+                      <th>Valor por Bulto</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (corte of cortes; track corte.id) {
+                      @let estadoCorte = obtenerEstadoCorte(corte);
+                      <tr>
+                        <td>
+                          <span class="badge {{ estadoCorte.clase }}">
+                            <i class="{{ estadoCorte.icono }} me-1"></i>{{ estadoCorte.estado }}
+                          </span>
+                        </td>
+                        <td>
+                          <div>
+                            <strong>{{ corte.cliente?.nombre }} {{ corte.cliente?.apellido }}</strong>
+                            @if (corte.cliente?.telefono) {
+                              <br><small class="text-muted">{{ corte.cliente?.telefono }}</small>
+                            }
+                          </div>
+                        </td>
+                        <td>{{ corte.fecha_inicio | date:'dd/MM/yyyy' }}</td>
+                        <td>
+                          @if (corte.fecha_fin) {
+                            {{ corte.fecha_fin | date:'dd/MM/yyyy' }}
+                          } @else {
+                            <em class="text-muted">Sin definir</em>
+                          }
+                        </td>
+                        <td class="text-success fw-bold">{{ corte.valor_bulto | currency:'COP':'symbol':'1.0-0' }}</td>
+                        <td>
+                          @if (corte.descripcion) {
+                            {{ corte.descripcion }}
+                          } @else {
+                            <em class="text-muted">Sin descripción</em>
+                          }
+                        </td>
+                        <td>
+                          <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-primary" (click)="abrirModalEditarCorte(corte)" title="Editar">
+                              <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-outline-danger" (click)="eliminarCorte(corte)" title="Eliminar">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
   }
 
   <!-- Error -->
@@ -203,3 +338,21 @@
     </div>
   }
 </div>
+
+<!-- Modal Agregar Corte -->
+<app-modal-agregar-corte
+  [temporadaId]="temporada?.id || 0"
+  [clientes]="clientes"
+  [maquinas]="maquinas"
+  [trabajadores]="trabajadores"
+  (corteCreado)="onCorteCreado($event)">
+</app-modal-agregar-corte>
+
+<!-- Modal Editar Corte -->
+<app-modal-editar-corte
+  [corte]="corteSeleccionado"
+  [clientes]="clientes"
+  [maquinas]="maquinas"
+  [trabajadores]="trabajadores"
+  (corteActualizado)="onCorteActualizado($event)">
+</app-modal-editar-corte>

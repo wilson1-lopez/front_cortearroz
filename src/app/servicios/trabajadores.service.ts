@@ -8,7 +8,7 @@ import { Trabajador } from '../modelos/trabajador.model';
   providedIn: 'root'
 })
 export class TrabajadoresService {
-  private apiUrl = 'http://127.0.0.1:8000/api/trabajadores';
+  private apiUrl = 'http://127.0.0.1:8000/api';
 
   constructor(private http: HttpClient) { }
 
@@ -19,16 +19,16 @@ export class TrabajadoresService {
 
   // Obtener todos los trabajadores
   obtenerTrabajadores(): Observable<Trabajador[]> {
-    return this.http.get<any>(`${this.apiUrl}/trabajadoresusuario`, {
+    return this.http.get<any>(`${this.apiUrl}/trabajadores/trabajadoresusuario`, {
       headers: this.getAuthHeaders()
     }).pipe(
-      map(response => response.data)
+      map(response => response.data || response)
     );
   }
 
   // Obtener un trabajador por ID
   obtenerTrabajadorPorId(id: number): Observable<Trabajador> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`, {
+    return this.http.get<any>(`${this.apiUrl}/trabajadores/${id}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -37,7 +37,7 @@ export class TrabajadoresService {
 
   // Crear un nuevo trabajador
   crearTrabajador(trabajador: Trabajador): Observable<Trabajador> {
-    return this.http.post<any>(this.apiUrl, trabajador, {
+    return this.http.post<any>(`${this.apiUrl}/trabajadores`, trabajador, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -46,7 +46,7 @@ export class TrabajadoresService {
 
   // Actualizar un trabajador
   actualizarTrabajador(id: number, trabajador: Trabajador): Observable<Trabajador> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, trabajador, {
+    return this.http.put<any>(`${this.apiUrl}/trabajadores/${id}`, trabajador, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -55,14 +55,14 @@ export class TrabajadoresService {
 
   // Eliminar un trabajador
   eliminarTrabajador(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`, {
+    return this.http.delete<any>(`${this.apiUrl}/trabajadores/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   // Buscar trabajadores por nombre
   buscarTrabajadores(nombre: string): Observable<Trabajador[]> {
-    return this.http.post<any>(`${this.apiUrl}/buscar`, { nombre }, {
+    return this.http.post<any>(`${this.apiUrl}/trabajadores/buscar`, { nombre }, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -71,7 +71,7 @@ export class TrabajadoresService {
 
   // Obtener trabajadores por usuario
   obtenerTrabajadoresPorUsuario(usuarioId: number): Observable<Trabajador[]> {
-    return this.http.get<any>(`${this.apiUrl}/usuario/${usuarioId}`, {
+    return this.http.get<any>(`${this.apiUrl}/trabajadores/usuario/${usuarioId}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -80,7 +80,7 @@ export class TrabajadoresService {
 
   // Obtener trabajadores por tipo
   obtenerTrabajadoresPorTipo(tipoId: number): Observable<Trabajador[]> {
-    return this.http.get<any>(`${this.apiUrl}/tipo/${tipoId}`, {
+    return this.http.get<any>(`${this.apiUrl}/trabajadores/tipo/${tipoId}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)
@@ -89,7 +89,7 @@ export class TrabajadoresService {
 
   // Obtener trabajador por cédula
   obtenerTrabajadorPorCedula(cedula: string): Observable<Trabajador> {
-    return this.http.get<any>(`${this.apiUrl}/cedula/${cedula}`, {
+    return this.http.get<any>(`${this.apiUrl}/trabajadores/cedula/${cedula}`, {
       headers: this.getAuthHeaders()
     }).pipe(
       map(response => response.data)

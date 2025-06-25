@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Cliente } from '../modelos/cliente.model';
 
 @Injectable({
@@ -18,9 +19,11 @@ export class ClientesService {
   }
 
   obtenerClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${this.apiUrl}/clientesusuario`, {
+    return this.http.get<any>(`${this.apiUrl}/clientesusuario`, {
       headers: this.getAuthHeaders()
-    });
+    }).pipe(
+      map(response => response.data || response)
+    );
   }
 
   agregarCliente(cliente: Cliente): Observable<Cliente> {
