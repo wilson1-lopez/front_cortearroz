@@ -1,0 +1,106 @@
+<!-- Modal para agregar nueva temporada -->
+<div class="modal fade" id="modalNuevaTemporada" tabindex="-1" aria-labelledby="modalNuevaTemporadaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalNuevaTemporadaLabel">Agregar Nueva Temporada</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="crearTemporada()" #temporadaForm="ngForm">
+          <div class="row">
+            <!-- Nombre -->
+            <div class="col-md-12 mb-3">
+              <label for="nombre" class="form-label fw-bold">Nombre de la Temporada *</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombre" 
+                name="nombre"
+                [(ngModel)]="nuevaTemporada.nombre"
+                required
+                maxlength="250"
+                placeholder="Ej: Temporada 2025-1"
+              >
+              <div class="form-text">Máximo 250 caracteres</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Fecha de Inicio -->
+            <div class="col-md-6 mb-3">
+              <label for="fecha_inicio" class="form-label fw-bold">Fecha de Inicio *</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="fecha_inicio" 
+                name="fecha_inicio"
+                [(ngModel)]="nuevaTemporada.fecha_inicio"
+                [min]="obtenerFechaMinima()"
+                required
+              >
+              <div class="form-text">Debe ser igual o posterior a hoy</div>
+            </div>
+
+            <!-- Fecha de Fin -->
+            <div class="col-md-6 mb-3">
+              <label for="fecha_fin" class="form-label fw-bold">Fecha de Fin</label>
+              <input 
+                type="date" 
+                class="form-control" 
+                id="fecha_fin" 
+                name="fecha_fin"
+                [(ngModel)]="nuevaTemporada.fecha_fin"
+                [min]="nuevaTemporada.fecha_inicio"
+              >
+              <div class="form-text">Opcional - Debe ser posterior a la fecha de inicio</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Valor por Bulto -->
+            <div class="col-md-6 mb-3">
+              <label for="valor_bulto" class="form-label fw-bold">Valor por Bulto (COP) *</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  id="valor_bulto" 
+                  name="valor_bulto"
+                  [(ngModel)]="nuevaTemporada.valor_bulto"
+                  required
+                  min="0"
+                  max="9999999.99"
+                  step="0.01"
+                  placeholder="0.00"
+                >
+              </div>
+              <div class="form-text">Entre $0 y $9,999,999.99</div>
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Información importante:</strong>
+            <ul class="mb-0 mt-2">
+              <li>La temporada será asociada automáticamente con tu usuario</li>
+              <li>El sistema verificará que las fechas no se solapen con otras temporadas</li>
+              <li>Si no especificas fecha de fin, la temporada estará abierta</li>
+            </ul>
+          </div>
+
+          <div class="text-muted">
+            <small>Los campos marcados con (*) son obligatorios</small>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="crearTemporada()">
+          <i class="bi bi-plus-circle me-2"></i>Crear Temporada
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -24,13 +24,30 @@
         </div>
       </div>
   
-      <!-- Tarjeta: Temporadas activas -->
+      <!-- Tarjeta: Repuestos -->
       <div class="col-md-4">
         <div class="card border-primary shadow-sm">
           <div class="card-body">
             <h5 class="card-title text-primary">Repuestos</h5>
-            <p class="card-text">Gestiona los repuestos.</p>
+            <p class="card-text">Gestiona los repuestos de maquinaria.</p>
             <a routerLink="/repuestos" class="btn btn-primary btn-sm">Ir a Repuestos</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Temporadas -->
+      <div class="col-md-4">
+        <div class="card border-warning shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title text-warning">
+              <i class="bi bi-calendar-range me-2"></i>Temporadas
+            </h5>
+            <p class="card-text">
+              <span class="badge bg-success me-2">{{ temporadasActivas }} Activas</span>
+              <span class="badge bg-secondary">{{ totalTemporadas }} Total</span>
+            </p>
+            <p class="card-text">Administra las temporadas de corte de arroz.</p>
+            <a routerLink="/temporadas" class="btn btn-warning btn-sm">Ir a Temporadas</a>
           </div>
         </div>
       </div>

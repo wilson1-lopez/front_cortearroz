@@ -1,0 +1,114 @@
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-md-start">Gestión de Temporadas</h2>
+  
+    <!-- Buscador y botón (responsive) -->
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <div class="input-group">
+          <input 
+            type="text" 
+            class="form-control" 
+            placeholder="Buscar temporada..."
+            [(ngModel)]="terminoBusqueda"
+            (keyup.enter)="buscarTemporadas()"
+          >
+          <button class="btn btn-outline-secondary" type="button" (click)="buscarTemporadas()">
+            <i class="bi bi-search"></i>
+          </button>
+          @if (terminoBusqueda) {
+            <button class="btn btn-outline-danger" type="button" (click)="limpiarBusqueda()">
+              <i class="bi bi-x"></i>
+            </button>
+          }
+        </div>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-end justify-content-md-start">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalNuevaTemporada">
+          <i class="bi bi-plus-circle me-2"></i>Nueva Temporada
+        </button>
+      </div>
+    </div>
+  
+    <!-- Tabla responsive -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Fecha Inicio</th>
+            <th>Fecha Fin</th>
+            <th>Valor por Bulto</th>
+            <th>Estado</th>
+            <th>Usuario</th>
+            <th>Fecha de Creación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (temporadas.length === 0) {
+            <tr>
+              <td colspan="9" class="text-center text-muted">No hay temporadas registradas</td>
+            </tr>
+          }
+          @for(temporada of temporadas; track temporada.id){
+            <tr>
+              <td>{{ temporada.id }}</td>
+              <td>
+                <strong>{{ temporada.nombre }}</strong>
+              </td>
+              <td>{{ temporada.fecha_inicio | date:'dd/MM/yyyy' }}</td>
+              <td>
+                @if (temporada.fecha_fin) {
+                  {{ temporada.fecha_fin | date:'dd/MM/yyyy' }}
+                } @else {
+                  <span class="text-muted">Sin definir</span>
+                }
+              </td>
+              <td>
+                <span class="fw-bold text-success">
+                  {{ temporada.valor_bulto | currency:'COP':'symbol':'1.0-0' }}
+                </span>
+              </td>
+              <td>
+                @let estadoInfo = obtenerEstadoTemporada(temporada);
+                <span class="badge {{ estadoInfo.clase }}">
+                  {{ estadoInfo.estado }}
+                </span>
+              </td>
+              <td>
+                @if (temporada.usuario) {
+                  {{ temporada.usuario.nombre }} {{ temporada.usuario.apellido }}
+                } @else {
+                  <span class="text-muted">No especificado</span>
+                }
+              </td>
+              <td>{{ temporada.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  <button class="btn btn-sm btn-info" title="Ver Detalles" (click)="verDetalles(temporada.id!)">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-warning" title="Editar" (click)="editarTemporada(temporada)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-danger" title="Eliminar" (click)="eliminarTemporada(temporada.id!)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- Modal para agregar temporada -->
+  <app-modalAgregarTemporada (temporadaCreada)="agregarTemporada($event)"></app-modalAgregarTemporada>
+  
+  <!-- Modal para editar temporada -->
+  <app-modalEditarTemporada 
+    [temporadaParaEditar]="temporadaSeleccionada" 
+    (temporadaEditada)="onTemporadaEditada($event)">
+  </app-modalEditarTemporada>

@@ -1,0 +1,115 @@
+<!-- Modal para editar temporada -->
+<div class="modal fade" id="modalEditarTemporada" tabindex="-1" aria-labelledby="modalEditarTemporadaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title" id="modalEditarTemporadaLabel">Editar Temporada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        @if (temporadaParaEditar) {
+          <form (ngSubmit)="editarTemporada()" #temporadaForm="ngForm">
+            <div class="row">
+              <!-- Nombre -->
+              <div class="col-md-12 mb-3">
+                <label for="nombre_editar" class="form-label fw-bold">Nombre de la Temporada *</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="nombre_editar" 
+                  name="nombre_editar"
+                  [(ngModel)]="temporadaEditando.nombre"
+                  required
+                  maxlength="250"
+                  placeholder="Ej: Temporada 2025-1"
+                >
+                <div class="form-text">Máximo 250 caracteres</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Fecha de Inicio -->
+              <div class="col-md-6 mb-3">
+                <label for="fecha_inicio_editar" class="form-label fw-bold">Fecha de Inicio *</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fecha_inicio_editar" 
+                  name="fecha_inicio_editar"
+                  [(ngModel)]="temporadaEditando.fecha_inicio"
+                  required
+                >
+                <div class="form-text">Fecha de inicio de la temporada</div>
+              </div>
+
+              <!-- Fecha de Fin -->
+              <div class="col-md-6 mb-3">
+                <label for="fecha_fin_editar" class="form-label fw-bold">Fecha de Fin</label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fecha_fin_editar" 
+                  name="fecha_fin_editar"
+                  [(ngModel)]="temporadaEditando.fecha_fin"
+                  [min]="temporadaEditando.fecha_inicio"
+                >
+                <div class="form-text">Opcional - Debe ser posterior a la fecha de inicio</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Valor por Bulto -->
+              <div class="col-md-6 mb-3">
+                <label for="valor_bulto_editar" class="form-label fw-bold">Valor por Bulto (COP) *</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    id="valor_bulto_editar" 
+                    name="valor_bulto_editar"
+                    [(ngModel)]="temporadaEditando.valor_bulto"
+                    required
+                    min="0"
+                    max="9999999.99"
+                    step="0.01"
+                    placeholder="0.00"
+                  >
+                </div>
+                <div class="form-text">Entre $0 y $9,999,999.99</div>
+              </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              <strong>Información:</strong>
+              <ul class="mb-0 mt-2">
+                <li><strong>Usuario:</strong> {{ temporadaParaEditar.usuario?.nombre }} {{ temporadaParaEditar.usuario?.apellido }}</li>
+                <li><strong>Creada:</strong> {{ temporadaParaEditar.created_at | date:'dd/MM/yyyy HH:mm' }}</li>
+                @if (temporadaParaEditar.updated_at !== temporadaParaEditar.created_at) {
+                  <li><strong>Última actualización:</strong> {{ temporadaParaEditar.updated_at | date:'dd/MM/yyyy HH:mm' }}</li>
+                }
+              </ul>
+            </div>
+
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              <strong>Nota:</strong> El sistema verificará que las nuevas fechas no se solapen con otras temporadas existentes.
+            </div>
+
+            <div class="text-muted">
+              <small>Los campos marcados con (*) son obligatorios</small>
+            </div>
+          </form>
+        }
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-warning" (click)="editarTemporada()">
+          <i class="bi bi-pencil me-2"></i>Actualizar Temporada
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
